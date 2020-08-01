@@ -1,6 +1,5 @@
 import React from "react";
 import s from "../todo/todo.module.css";
-import {connect} from "react-redux";
 
 const Header = (props) => {
     const resetList = () => {

@@ -1,20 +1,18 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ItemList from "./itemList";
 import s from "./todo.module.css"
-
-
-
 
 const TodoList = (props) => {
     const [sortUp, setSortUp] = useState(false);
     const [sortParam, setSortParam] = useState('');
 
-
     let checkedSort = (e) => {
         (sortParam === e.target.value) ? setSortUp(!sortUp) : setSortUp(true);
         setSortParam(e.target.value);
         props.setSort(e.target.value, sortUp);
+
     }
+
     return (
         <table className={s.table}>
             <thead>
@@ -28,7 +26,7 @@ const TodoList = (props) => {
                     <input onClick={(e) => checkedSort(e)}
                            className={(sortUp) ? s.radio_btn : s.radio_btn_up}
                            type="radio" value='type' name="sort"/></th>
-                <th colspan='2'>date
+                <th style={{width: '250px'}}>date
                     <input onClick={(e) => checkedSort(e)}
                            className={(sortUp) ? s.radio_btn : s.radio_btn_up}
                            type="radio" value='date' name="sort"/></th>
@@ -36,7 +34,7 @@ const TodoList = (props) => {
             </thead>
             <tbody>
             {props.data.map((elem, i) => {
-                return <ItemList renameTitle={props.renameTitle} key={i} delData={props.delData}
+                return <ItemList setData={props.setData} changeValue={props.changeValue} key={i} delData={props.delData}
                                  setCompleted={props.setCompleted} {...elem}/>
             })}
             </tbody>

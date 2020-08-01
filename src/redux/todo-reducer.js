@@ -4,7 +4,7 @@ const RESET_DATA = 'RESET_DATA';
 const SET_SORT = 'SET_SORT';
 const SET_COMPLETED = 'SET_COMPLETED';
 const DEL_DATA = 'DEL_DATA';
-const RENAME_TITLE = 'RENAME_TITLE';
+const CHANGE_VALUE = 'CHANGE_VALUE';
 
 let initialState = {
     data: [],
@@ -37,18 +37,13 @@ const todoReducer = (state = initialState, action) => {
                 ...state,
                 data: []
             }
-        case
-        SET_SORT:
-            state.data.sort(function (a, b) {
-                if (a[action.param] > b[action.param])
-                    return 1;
-                else if (a[action.param] < b[action.param])
-                    return -1;
-                return 0;
-            });
-            if (!action.up)
-                state.data = state.data.reverse();
-            return {...state}
+        case SET_SORT:
+            let copy = state.data.map(a => a);
+            copy = copy.sort((a, b) => (a[action.param] > b[action.param] ? 1 : -1))
+            if (action.up)
+            copy.reverse();
+
+            return {data:[...copy]}
 
         case SET_COMPLETED:
             return {
@@ -59,12 +54,17 @@ const todoReducer = (state = initialState, action) => {
                     return e;
                 })
             }
-        case RENAME_TITLE:
+        case CHANGE_VALUE:
             return {
                 ...state,
                 data: state.data.map(e => {
-                    if (e.id === action.id)
-                        return {...e, title: action.title}
+                    if (e.id === action.data.id)
+                        return {
+                            ...e, title: action.data.title,
+                            description: action.data.description,
+                            date: action.data.date,
+                            type: action.data.type
+                        }
                     return e;
                 })
             }
@@ -72,12 +72,13 @@ const todoReducer = (state = initialState, action) => {
             return state;
     }
 }
+
 export const setData = (data) => ({type: SET_DATA, data});
 export const addData = (data) => ({type: ADD_DATA, data});
 export const resetData = () => ({type: RESET_DATA});
 export const setSort = (param, up) => ({type: SET_SORT, param, up});
 export const setCompleted = (id) => ({type: SET_COMPLETED, id})
-export const renameTitle = (title, id) => ({type: RENAME_TITLE, title, id})
+export const changeValue = (data) => ({type: CHANGE_VALUE, data})
 export const delData = (id) => ({type: DEL_DATA, id})
 
 export default todoReducer;

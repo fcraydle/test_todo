@@ -41,6 +41,7 @@ input, button {
 
 .table {
   width: 100%;
+  max-width: 800px;
 }
 .table td, .table th {
   height: 63px;
@@ -59,13 +60,16 @@ input, button {
 .table td {
   min-width: 90px;
 }
+.table .hide {
+  display: none;
+}
 
 .input_add {
   margin: 20px 0;
   width: 100%;
   height: 30px;
   border-radius: 8px;
-  border: solid 1px #666565;
+  border: solid 1px rgba(0, 0, 0, 0.1);
   font-size: 15px;
   background-color: white;
 }
@@ -97,6 +101,9 @@ input, button {
 }
 
 .container {
+  width: 80%;
+  margin: auto;
+  max-width: 900px;
   padding-left: 90px;
   width: 80%;
   margin: auto;
@@ -136,7 +143,7 @@ input, button {
 .radio_btn, .radio_btn_up {
   outline: none;
   border: 5px solid transparent;
-  border-top: 10px solid rgba(0, 0, 0, 0.2);
+  border-top: 10px solid rgba(0, 0, 0, 0.1);
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -159,6 +166,24 @@ input, button {
   -moz-appearance: none;
   appearance: none;
   transform: rotate(180deg);
+}
+
+.show_row {
+  animation: fadeIn 1s;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.show_ic_done {
+  animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /*# sourceMappingURL=todo.module.css.map */
