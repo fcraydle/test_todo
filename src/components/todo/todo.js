@@ -34,12 +34,13 @@ const Todo = (props) => {
                 <h1>ToDo App</h1>
                 <input type="text" className={s.input_add} value={todoValue.title} placeholder=' Title task'
                        onChange={e => setTodoValue({...todoValue, title: e.target.value})}/>
-                <textarea rows='4' type="text" className={s.input_add} value={todoValue.description} placeholder=' Description'
+                <textarea type="text" className={`${s.input_add} ${s.textarea}`} value={todoValue.description} placeholder=' Description'
                           onChange={e => setTodoValue({...todoValue, description: e.target.value})}/>
+                <div className={s.todo_type}>
                 <input type="datetime-local"
                        className={s.form_date} value={todoValue.date} min={todoValue.date}
                        onChange={e => setTodoValue({...todoValue, date: e.target.value})}/>
-                <div className={s.todo_type}>
+
                     <span>Work </span>
                     <input type="radio" name="type" value="work"
                            checked={(todoValue.type === 'work' ? true : false)}

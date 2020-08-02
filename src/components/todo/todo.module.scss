@@ -3,6 +3,7 @@ $orange: #ff9a32;
 $red: #fe5b3b;
 $blue: #0091ff;
 $gray: rgba(0, 0, 0, 0.1);
+$white : #ffffff;
 
 * {
   box-sizing: border-box;
@@ -37,15 +38,18 @@ $gray: rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin: 20px auto;
   color: $orange;
   text-align: center;
 
 }
 
-input, button {
+input, button , textarea {
   outline: none;
+}
+
+.textarea::placeholder, .input_add::placeholder{
+padding: 4px;
 }
 
 .table {
@@ -77,6 +81,10 @@ input, button {
   }
 }
 
+.textarea{
+ height: 300px;
+}
+
 .input_add {
   margin: 20px 0;
   width: 100%;
@@ -85,6 +93,7 @@ input, button {
   border: solid 1px $gray;
   font-size: 15px;
   background-color: white;
+
 }
 
 .form_date {
@@ -101,18 +110,25 @@ input, button {
 
 
   .btn_add {
-    margin: 20px 0;
+    margin: 20px auto;
     border: none;
     background: $green;
     width: 152px;
     height: 42px;
     border-radius: 21px;
     color: white;
+    //transition: border 3s linear;
+  }
+
+  .btn_add:active {
+    width: 148px;
+    height: 38px;
+    border-radius: 19px;
+    border: solid 2px var(--$white);
   }
 
   .btn_add:disabled {
     opacity: 0.5;
-
   }
 }
 
@@ -136,10 +152,17 @@ input, button {
 }
 
 .todo_type {
-  margin-left: 10px;
-
-  input {
-    margin-right: 10px;
+  input[type='radio']{
+    margin-right: 20px;
+  }
+  input[type='datetime-local'] {
+    padding-left: 6px;
+    height: 30px;
+    margin-right: 20px;
+    border-radius: 8px;
+    border: solid 1px $gray;
+    color: rgba(0,0,0,0.5);
+    background-color: white;
   }
 }
 
@@ -201,12 +224,3 @@ input, button {
     opacity: 1;
   }
 }
-.btn_add:active {
-  width: 148px;
-  height: 38px;
-  border-radius: 19px;
-  border: solid 2px var(--white);
-}
-
-//
-//transition: background-color 1s linear;
