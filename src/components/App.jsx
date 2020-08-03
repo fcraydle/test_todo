@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Route, Switch} from "react-router-dom";
 import NotFound from "./error/notFound";
-import Todo from './todo/todo.js'
+import Todo from './todo/todo.jsx'
 import Header from "./header/header";
 import {useDispatch, useSelector} from "react-redux";
 import {workflowActions} from "../redux/workflowActions";

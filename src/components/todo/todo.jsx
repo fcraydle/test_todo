@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import s from './todo.module.css';
+import styles from './todo.module.css';
 import TodoList from "./todoList";
 import {useDispatch} from "react-redux";
 import {workflowActions} from "../../redux/workflowActions";
@@ -23,24 +23,23 @@ const Todo = (props) => {
     const dispatch = useDispatch();
 
     const addTodo = (value) => {
-       dispatch(workflowActions.addData(value));
+        dispatch(workflowActions.addData(value));
         setTodoValue({title: '', type: 'work', description: '', date: getDate()});
     }
 
-
     return (
-        <div className={s.container}>
-            <div className={s.todo_form}>
+        <div className={styles.container}>
+            <div className={styles.todo_form}>
                 <h1>ToDo App</h1>
-                <input type="text" className={s.input_add} value={todoValue.title} placeholder=' Title task'
+                <input type="text" className={styles.input_add} value={todoValue.title} placeholder=' Title task'
                        onChange={e => setTodoValue({...todoValue, title: e.target.value})}/>
-                <textarea type="text" className={`${s.input_add} ${s.textarea}`} value={todoValue.description} placeholder=' Description'
+                <textarea type="text" className={styles.input_add}
+                          value={todoValue.description} placeholder=' Description'
                           onChange={e => setTodoValue({...todoValue, description: e.target.value})}/>
-                <div className={s.todo_type}>
-                <input type="datetime-local"
-                       className={s.form_date} value={todoValue.date} min={todoValue.date}
-                       onChange={e => setTodoValue({...todoValue, date: e.target.value})}/>
-
+                <div className={styles.todo_type}>
+                    <input type="datetime-local"
+                           className={styles.form_date} value={todoValue.date} min={todoValue.date}
+                           onChange={e => setTodoValue({...todoValue, date: e.target.value})}/>
                     <span>Work </span>
                     <input type="radio" name="type" value="work"
                            checked={(todoValue.type === 'work' ? true : false)}
@@ -51,7 +50,7 @@ const Todo = (props) => {
                            onChange={e => setTodoValue({...todoValue, type: e.target.value})}/>
                 </div>
                 <button disabled={(todoValue.title !== '') ? false : true}
-                        onClick={() => addTodo(todoValue)} className={s.btn_add}>Add
+                        onClick={() => addTodo(todoValue)} className={styles.btn_add}>Add
                 </button>
             </div>
             <TodoList data={props.data}/>

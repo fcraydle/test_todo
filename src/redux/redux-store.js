@@ -1,10 +1,10 @@
 import {createStore, combineReducers} from 'redux';
-import todoReducer from "./todo-reducer";
+import todoPage from "./todo-reducer";
 
-let reducers = combineReducers({
-    todoPage: todoReducer
+const reducers = combineReducers({
+    todoPage
 });
+
 let store = createStore(reducers);
-window.store = store;
 
 export default store;

@@ -1,10 +1,11 @@
-const SET_DATA = 'SET_DATA';
-const ADD_DATA = 'ADD_DATA';
-const RESET_DATA = 'RESET_DATA';
-const SET_SORT = 'SET_SORT';
-const SET_COMPLETED = 'SET_COMPLETED';
-const DEL_DATA = 'DEL_DATA';
-const CHANGE_VALUE = 'CHANGE_VALUE';
+export const SET_DATA = 'SET_DATA';
+export const ADD_DATA = 'ADD_DATA';
+export const RESET_DATA = 'RESET_DATA';
+export const SET_SORT = 'SET_SORT';
+export const SET_COMPLETED = 'SET_COMPLETED';
+export const DEL_DATA = 'DEL_DATA';
+export const CHANGE_VALUE = 'CHANGE_VALUE';
+
 
 let initialState = {
     data: [],
@@ -30,7 +31,7 @@ const todoReducer = (state = initialState, action) => {
                 }]
             };
         case DEL_DATA:
-            return {...state, data: state.data.filter(elem => elem.id !== action.id)}
+            return {...state, data: state.data.filter(elem => elem.id !== action.data)}
 
         case RESET_DATA:
             return {
@@ -39,8 +40,8 @@ const todoReducer = (state = initialState, action) => {
             }
         case SET_SORT:
             let copy = state.data.map(a => a);
-            copy = copy.sort((a, b) => (a[action.param] > b[action.param] ? 1 : -1))
-            if (action.up)
+            copy = copy.sort((a, b) => (a[action.data.param] > b[action.data.param] ? 1 : -1))
+            if (action.data.up)
                 copy.reverse();
 
             return {data: [...copy]}
@@ -49,7 +50,7 @@ const todoReducer = (state = initialState, action) => {
             return {
                 ...state,
                 data: state.data.map(e => {
-                    if (e.id === action.id)
+                    if (e.id === action.data)
                         return {...e, completed: !e.completed}
                     return e;
                 })

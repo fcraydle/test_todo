@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import s from "./todo.module.css"
+import styles from "./todo.module.css"
 import icDown from "../../assets/ic-list-down.svg";
 import icUp from "../../assets/ic-list-up.svg";
 import icDone from "../../assets/ic-done.svg";
@@ -35,7 +35,6 @@ const ItemList = (props) => {
     const [editMode, setEditMode] = useState(false);
     const [hide, setHide] = useState(true);
 
-
     const activateMode = () => {
         setEditMode(true);
         setChangeTodo({title: props.title, date: props.date, description: props.description, type: props.type})
@@ -50,50 +49,49 @@ const ItemList = (props) => {
     return (<>
             {(!editMode) ?
                 <>
-                    <tr onDoubleClick={activateMode} className={s[makeClass(props.date, props.completed)]}>
+                    <tr onDoubleClick={activateMode} className={styles[makeClass(props.date, props.completed)]}>
                         <td><input type="checkbox"
                                    checked={props.completed}
                                    onChange={() => {
                                        dispatch(workflowActions.setCompleted(props.id))
                                    }}/></td>
-                        <td className={s[makeClass(props.date, props.completed)]}>{props.title}</td>
+                        <td className={styles[makeClass(props.date, props.completed)]}>{props.title}</td>
                         <td>{props.type}</td>
                         <td>{props.date}<img src={(hide) ? icDown : icUp}
-                                             onClick={() => {
-                                                 setHide(!hide)
-                                             }} alt="show"/></td>
-                        <td className={s.del_col}><img
-                            onClick={() => dispatch(workflowActions.delData(props.id))} src={icDelete} alt="del"/></td>
+                                             onClick={() => {setHide(!hide)}} alt="show"/></td>
+                        <td className={styles.del_col}><img onClick={() => dispatch(workflowActions.delData(props.id))}
+                                                            src={icDelete} alt="del"/></td>
                     </tr>
-                    <tr onDoubleClick={activateMode} className={(hide) ? s.hide : s.show_row}>
+                    <tr onDoubleClick={activateMode} className={(hide) ? styles.hide : styles.show_row}>
                         <td colSpan="4">{props.description}</td>
                     </tr>
                 </>
                 : <>
-                    <tr onDoubleClick={activateMode} className={s[makeClass(props.date, props.completed)]}>
+                    <tr onDoubleClick={activateMode} className={styles[makeClass(props.date, props.completed)]}>
                         <td><input type="checkbox" checked={props.completed}
                                    onChange={() => {
                                        dispatch(workflowActions.setCompleted(props.id))
                                    }}/></td>
-                        <td><input onChange={e => setChangeTodo({...changeTodo, title: e.target.value})}
+                        <td><input  onChange={e => setChangeTodo({...changeTodo, title: e.target.value})}
                                    value={changeTodo.title}
-                                   className={s[makeClass(props.date, props.completed)]}/></td>
+                                    className={styles.change_form}/></td>
                         <td>
-                            <select defaultValue={props.type}
+                            <select   className={styles.change_form} defaultValue={props.type}
                                     onChange={e => setChangeTodo({...changeTodo, type: e.target.value})}>
                                 <option value='work'> work</option>
                                 <option value='personal'> personal</option>
                             </select></td>
-                        <td><input type="datetime-local"
+                        <td><input  className={styles.change_form} type="datetime-local"
                                    onChange={e => setChangeTodo({...changeTodo, date: e.target.value})}
-                                   value={props.date}/> <img src={(hide) ? icDown : icUp}
+                                   value={changeTodo.date}/> <img src={(hide) ? icDown : icUp}
                                                              onClick={() => {setHide(!hide)}} alt="show"/></td>
-                        <td className={s.del_col}>
+                        <td className={styles.del_col}>
                             <img onClick={deactivateMode} src={icDone} alt="done"/>
                         </td>
                     </tr>
-                    <tr onDoubleClick={activateMode} className={(hide) ? s.hide : s.show_row}>
+                    <tr onDoubleClick={activateMode} className={(hide) ? styles.hide : styles.show_row}>
                         <td colSpan="4"><textarea type="text"
+                                                  className={styles.change_form}
                                                   onChange={e => setChangeTodo({...changeTodo, description: e.target.value})}
                                                   value={changeTodo.description}/></td>
                     </tr>
