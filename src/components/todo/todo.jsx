@@ -1,61 +1,29 @@
-import React, {useState} from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styles from './todo.module.css';
-import TodoList from "./todoList";
-import {useDispatch} from "react-redux";
-import {workflowActions} from "../../redux/workflowActions";
+import TodoList from './todoList';
+import { addData as dispatchAddData, setSort as dispatchSetSort }
+  from '../../redux/workflowActions';
+import AddTodo from './addTodo';
 
-const getDate = () => {
-    let d = new Date();
-    let day = d.getDate();
-    day = (day < 10) ? `0${day}` : day;
-    let month = d.getMonth() + 1;
-    month = (month < 10) ? `0${month}` : month;
-    let year = d.getFullYear();
-    let hours = d.getHours();
-    hours = (hours < 10) ? `0${hours}` : hours;
-    let minutes = d.getMinutes();
-    minutes = (minutes < 10) ? `0${minutes}` : minutes;
-    return (`${year}-${month}-${day}T${hours}:${minutes}`);
-}
-
-const Todo = (props) => {
-    const [todoValue, setTodoValue] = useState({type: 'work', title: '', description: '', date: getDate()});
-    const dispatch = useDispatch();
-
-    const addTodo = (value) => {
-        dispatch(workflowActions.addData(value));
-        setTodoValue({title: '', type: 'work', description: '', date: getDate()});
-    }
-
-    return (
-        <div className={styles.container}>
-            <div className={styles.todo_form}>
-                <h1>ToDo App</h1>
-                <input type="text" className={styles.input_add} value={todoValue.title} placeholder=' Title task'
-                       onChange={e => setTodoValue({...todoValue, title: e.target.value})}/>
-                <textarea type="text" className={styles.input_add}
-                          value={todoValue.description} placeholder=' Description'
-                          onChange={e => setTodoValue({...todoValue, description: e.target.value})}/>
-                <div className={styles.todo_type}>
-                    <input type="datetime-local"
-                           className={styles.form_date} value={todoValue.date} min={todoValue.date}
-                           onChange={e => setTodoValue({...todoValue, date: e.target.value})}/>
-                    <span>Work </span>
-                    <input type="radio" name="type" value="work"
-                           checked={(todoValue.type === 'work' ? true : false)}
-                           onChange={e => setTodoValue({...todoValue, type: e.target.value})}/>
-                    <span>Personal </span>
-                    <input checked={(todoValue.type !== 'work' ? true : false)} type="radio" name="type"
-                           value="personal"
-                           onChange={e => setTodoValue({...todoValue, type: e.target.value})}/>
-                </div>
-                <button disabled={(todoValue.title !== '') ? false : true}
-                        onClick={() => addTodo(todoValue)} className={styles.btn_add}>Add
-                </button>
-            </div>
-            <TodoList data={props.data}/>
-        </div>
-    )
+const Todo = ({ data, addData, setSort }) => (
+  <div className={styles.container}>
+    <AddTodo addData={addData} />
+    <TodoList data={data} setSort={setSort} />
+  </div>
+);
+Todo.propTypes = {
+  data: PropTypes.array,
+  addData: PropTypes.func,
+  setSort: PropTypes.func,
+};
+const mapStateToProps = (state) => ({
+  data: state.todoPage.data,
+});
+const mapDispatchToProps = {
+  addData: dispatchAddData,
+  setSort: dispatchSetSort,
 };
 
-export default Todo;
+export default connect(mapStateToProps, mapDispatchToProps)(Todo);

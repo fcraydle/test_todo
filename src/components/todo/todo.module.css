@@ -9,6 +9,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  height: 60px;
   background: #10bf6a;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
@@ -36,6 +37,14 @@ h1 {
 
 input, button, textarea {
   outline: none;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  min-width: 840px;
+  margin: auto;
+  padding-left: 90px;
 }
 
 .textarea::placeholder, .input_add::placeholder {
@@ -74,9 +83,6 @@ input, button, textarea {
   font-size: 15px;
   background-color: white;
 }
-.change_form input[type=""] {
-  width: 185px;
-}
 .change_form textarea {
   width: 100%;
 }
@@ -92,14 +98,18 @@ input, button, textarea {
 }
 
 .form_date {
+  padding-left: 5px;
+  height: 30px;
+  border-radius: 8px;
+  color: rgba(0, 0, 0, 0.6);
+  border: solid 1px rgba(0, 0, 0, 0.1);
   width: 177px;
 }
 
 .todo_form {
   margin: auto;
   padding-right: 90px;
-  min-width: 400px;
-  max-width: 480px;
+  width: 480px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -122,12 +132,6 @@ input, button, textarea {
   opacity: 0.5;
 }
 
-.container {
-  width: 900px;
-  margin: auto;
-  padding-left: 90px;
-}
-
 .completed {
   text-decoration: line-through;
 }
@@ -141,7 +145,7 @@ input, button, textarea {
 }
 
 .todo_type input[type=radio] {
-  margin-right: 20px;
+  margin: 0 10px;
 }
 .todo_type input[type=datetime-local] {
   padding-left: 6px;
@@ -209,6 +213,59 @@ input, button, textarea {
   to {
     opacity: 1;
   }
+}
+input[type=radio],
+label {
+  cursor: pointer;
+}
+
+.todo_type input[type=radio] {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.todo_type input:checked::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid #10bf6a;
+}
+
+.todo_type input::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.todo_type input:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10bf6a;
+  transform: translate(-50%, -50%);
+  visibility: visible;
 }
 
 /*# sourceMappingURL=todo.module.css.map */

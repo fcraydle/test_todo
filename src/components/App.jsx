@@ -1,37 +1,46 @@
-import React, {useEffect} from 'react';
-import {Route, Switch} from "react-router-dom";
-import NotFound from "./error/notFound";
-import Todo from './todo/todo.jsx'
-import Header from "./header/header";
-import {useDispatch, useSelector} from "react-redux";
-import {workflowActions} from "../redux/workflowActions";
+import React, { useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import NotFound from './error/notFound';
+import Todo from './todo/todo';
+import Header from './header/header';
+import { setData as dispatchSetData, resetData as dispatchResetData }
+  from '../redux/workflowActions';
+import { getDataStore, setDataStore } from '../utils/requests';
 
+function App({ data, setData, resetData }) {
+  useEffect(() => {
+    const todoList = getDataStore();
+    setData(todoList);
+  }, [setData]);
 
-function App() {
-    const dispatch = useDispatch();
-    const data = useSelector(state => state.todoPage.data);
+  useEffect(() => {
+    setDataStore(data);
+  }, [data]);
 
-    useEffect(() => {
-        if (localStorage.getItem('todo')) {
-            let todoList = JSON.parse(localStorage.getItem('todo'));
-            dispatch(workflowActions.setData(todoList));
-        }
-    }, [])
-
-    useEffect(() => {
-        localStorage.setItem('todo', JSON.stringify(data))
-    }, [data])
-
-    return (
-        <div>
-            <Header/>
-            <Switch>
-                <Route exact path='/' render={() => <Todo data={data}/>}/>
-                <Route render={() => <NotFound/>}/>
-            </Switch>
-        </div>
-    );
+  return (
+    <div>
+      <Header resetData={resetData} />
+      <Switch>
+        <Route exact path="/" render={() => <Todo />} />
+        <Route render={() => <NotFound />} />
+      </Switch>
+    </div>
+  );
 }
+App.propTypes = {
+  data: PropTypes.array,
+  setData: PropTypes.func,
+  resetData: PropTypes.func,
+};
 
+const mapStateToProps = (state) => ({
+  data: state.todoPage.data,
+});
+const mapDispatchToProps = {
+  setData: dispatchSetData,
+  resetData: dispatchResetData,
+};
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
