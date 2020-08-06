@@ -1,10 +1,8 @@
 export const getDataStore = () => {
-  if (localStorage.getItem('todo')) {
-    const todoList = JSON.parse(localStorage.getItem('todo'));
-    if (Array.isArray(todoList)) return (todoList);
-  } else return [];
+  const todoList = JSON.parse(localStorage.getItem('todo'));
+  return (Array.isArray(todoList || localStorage.getItem('todo'))) ? todoList : [];
 };
 
-export const setDataStore = (data) => {
-  localStorage.setItem('todo', JSON.stringify(data));
-};
+export const setDataStore = (data) => localStorage.setItem('todo', JSON.stringify(data));
+
+export const delDataStore = () => localStorage.removeItem('todo');

@@ -3,27 +3,33 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './todo.module.css';
 import TodoList from './todoList';
-import { addData as dispatchAddData, setSort as dispatchSetSort }
-  from '../../redux/workflowActions';
+import { addData, setSort } from '../../redux/workflowActions';
 import AddTodo from './addTodo';
 
-const Todo = ({ data, addData, setSort }) => (
+const Todo = ({ data, dispatchAddData, dispatchSetSort }) => (
   <div className={styles.container}>
-    <AddTodo addData={addData} />
-    <TodoList data={data} setSort={setSort} />
+    <AddTodo addData={dispatchAddData} />
+    <TodoList data={data} setSort={dispatchSetSort} />
   </div>
 );
 Todo.propTypes = {
-  data: PropTypes.array,
-  addData: PropTypes.func,
-  setSort: PropTypes.func,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    complete: PropTypes.bool,
+    type: PropTypes.string,
+    date: PropTypes.string,
+  })),
+  dispatchAddData: PropTypes.func,
+  dispatchSetSort: PropTypes.func,
 };
 const mapStateToProps = (state) => ({
   data: state.todoPage.data,
 });
 const mapDispatchToProps = {
-  addData: dispatchAddData,
-  setSort: dispatchSetSort,
+  dispatchAddData: addData,
+  dispatchSetSort: setSort,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todo);

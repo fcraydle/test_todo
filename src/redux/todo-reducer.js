@@ -46,7 +46,6 @@ const todoReducer = (state = initialState, action) => {
         return 0;
       });
       if (action.data.up) copy.reverse();
-
       return { data: [...copy] };
 
     case SET_COMPLETED:

@@ -5,15 +5,14 @@ import PropTypes from 'prop-types';
 import NotFound from './error/notFound';
 import Todo from './todo/todo';
 import Header from './header/header';
-import { setData as dispatchSetData, resetData as dispatchResetData }
-  from '../redux/workflowActions';
+import { setData, resetData } from '../redux/workflowActions';
 import { getDataStore, setDataStore } from '../utils/requests';
 
-function App({ data, setData, resetData }) {
+function App({ data, dispatchSetData, dispatchResetData }) {
   useEffect(() => {
     const todoList = getDataStore();
-    setData(todoList);
-  }, [setData]);
+    dispatchSetData(todoList);
+  }, [dispatchSetData]);
 
   useEffect(() => {
     setDataStore(data);
@@ -21,7 +20,7 @@ function App({ data, setData, resetData }) {
 
   return (
     <div>
-      <Header resetData={resetData} />
+      <Header resetData={dispatchResetData} />
       <Switch>
         <Route exact path="/" render={() => <Todo />} />
         <Route render={() => <NotFound />} />
@@ -30,17 +29,24 @@ function App({ data, setData, resetData }) {
   );
 }
 App.propTypes = {
-  data: PropTypes.array,
-  setData: PropTypes.func,
-  resetData: PropTypes.func,
+    data: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    complete: PropTypes.bool,
+    type: PropTypes.string,
+    date: PropTypes.string,
+  })),
+  dispatchSetData: PropTypes.func,
+  dispatchResetData: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
   data: state.todoPage.data,
 });
 const mapDispatchToProps = {
-  setData: dispatchSetData,
-  resetData: dispatchResetData,
+  dispatchSetData: setData,
+  dispatchResetData: resetData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

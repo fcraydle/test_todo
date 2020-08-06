@@ -7,13 +7,10 @@ import icUp from '../../assets/ic-list-up.svg';
 import icDone from '../../assets/ic-done.svg';
 import icDelete from '../../assets/ic-delete.svg';
 import makeClass from '../../utils/makeClass';
-import {
-  changeValue as dispatchChangeValue, setCompleted as dispatchSetCompleted,
-  delData as dispatchDelData,
-} from '../../redux/workflowActions';
+import { changeValue, setCompleted, delData } from '../../redux/workflowActions';
 
 const ItemList = ({
-  elem, changeValue, setCompleted, delData,
+  elem, dispatchChangeValue, dispatchSetCompleted, dispatchDelData,
 }) => {
   const [changeTodo, setChangeTodo] = useState({
     title: '', date: '', description: '', type: '',
@@ -30,7 +27,7 @@ const ItemList = ({
 
   const deactivateMode = () => {
     setEditMode(false);
-    changeValue({ ...changeTodo, id: elem.id });
+    dispatchChangeValue({ ...changeTodo, id: elem.id });
     setChangeTodo({
       title: '', date: '', description: '', type: '',
     });
@@ -38,45 +35,49 @@ const ItemList = ({
 
   return (
     <>
-      {(!editMode)
-        ? (
-          <>
-            <tr
-              onDoubleClick={activateMode}
-              className={styles[makeClass(elem.date, elem.completed)]}
-            >
-              <td>
-                <input
-                  type="checkbox"
-                  checked={elem.completed}
-                  onChange={() => { setCompleted(elem.id); }}
-                />
-              </td>
-              <td className={styles[makeClass(elem.date, elem.completed)]}>{elem.title}</td>
-              <td>{elem.type}</td>
-              <td>
-                {elem.date}
-                <img
-                  src={(hide) ? icDown : icUp}
-                  onClick={() => { setHide(!hide); }}
-                  alt="show"
-                />
-              </td>
-              <td className={styles.del_col}>
-                <img
-                  onClick={() => delData(elem.id)}
-                  src={icDelete}
-                  alt="del"
-                />
-              </td>
+      {!editMode && (
+      <>
+        <tr
+          onDoubleClick={activateMode}
+          className={styles[makeClass(elem.date, elem.completed)]}
+        >
+          <td>
+            <input
+              type="checkbox"
+              checked={elem.completed}
+              onChange={() => {
+                dispatchSetCompleted(elem.id);
+              }}
+            />
+          </td>
+          <td className={styles[makeClass(elem.date, elem.completed)]}>{elem.title}</td>
+          <td>{elem.type}</td>
+          <td>
+            {elem.date}
+            <img
+              src={(hide) ? icDown : icUp}
+              onClick={() => {
+                setHide(!hide);
+              }}
+              alt="show"
+            />
+          </td>
+          <td className={styles.del_col}>
+            <img
+              onClick={() => dispatchDelData(elem.id)}
+              src={icDelete}
+              alt="del"
+            />
+          </td>
 
-            </tr>
-            <tr onDoubleClick={activateMode} className={(hide) ? styles.hide : styles.show_row}>
-              <td colSpan="4">{elem.description}</td>
-            </tr>
-          </>
-        )
-        : (
+        </tr>
+        <tr onDoubleClick={activateMode} className={(hide) ? styles.hide : styles.show_row}>
+          <td colSpan="4">{elem.description}</td>
+        </tr>
+      </>
+      )}
+      {editMode
+          && (
           <>
             <tr
               onDoubleClick={activateMode}
@@ -86,7 +87,7 @@ const ItemList = ({
                 <input
                   type="checkbox"
                   checked={elem.completed}
-                  onChange={() => { setCompleted(elem.id); }}
+                  onChange={() => { dispatchSetCompleted(elem.id); }}
                 />
               </td>
               <td>
@@ -135,23 +136,28 @@ const ItemList = ({
               </td>
             </tr>
           </>
-        )}
+          )}
     </>
   );
 };
 ItemList.propTypes = {
-  elem: PropTypes.object,
-  changeValue: PropTypes.func,
-  delData: PropTypes.func,
-  setCompleted: PropTypes.func,
+  elem: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    complete: PropTypes.bool,
+    type: PropTypes.string,
+    date: PropTypes.string,
+  }),
+  dispatchChangeValue: PropTypes.func,
+  dispatchDelData: PropTypes.func,
+  dispatchSetCompleted: PropTypes.func,
 };
-const mapStateToProps = (state) => ({
-  data: state.todoPage.data,
-});
+const mapStateToProps = () => ({});
 const mapDispatchToProps = {
-  changeValue: dispatchChangeValue,
-  setCompleted: dispatchSetCompleted,
-  delData: dispatchDelData,
+  dispatchChangeValue: changeValue,
+  dispatchSetCompleted: setCompleted,
+  dispatchDelData: delData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemList);

@@ -1,27 +1,26 @@
-import React from 'react';
-import styles from '../todo/todo.module.css';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import styles from '../todo/todo.module.css';
+import { delDataStore } from '../../utils/requests';
 
 const Header = ({ resetData }) => {
-  const resetList = () => {
+  const resetList = useCallback(() => {
     const ans = window.confirm('Reset list?');
     if (ans) {
-      localStorage.removeItem('todo');
+      delDataStore();
       resetData();
     }
-  };
+  }, [resetData]);
 
   return (
-
     <div className={styles.header}>
       <p>Sklerontina</p>
-      <button onClick={resetList}>Reset list</button>
+      <button type="button" onClick={resetList}>Reset list</button>
     </div>
   );
 };
 
 Header.propTypes = {
-  data: PropTypes.array,
   resetData: PropTypes.func,
 };
 

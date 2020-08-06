@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ItemList from './itemList';
 import styles from './todo.module.css';
@@ -7,14 +7,14 @@ const TodoList = ({ data, setSort }) => {
   const [sortUp, setSortUp] = useState(true);
   const [sortParam, setSortParam] = useState('');
 
-  const checkedSort = (e) => {
+  const checkedSort = useCallback((e) => {
     if (sortParam === e.target.value) setSortUp(!sortUp);
     else {
       setSortUp(false);
       setSortParam(e.target.value);
     }
     setSort({ param: e.target.value, up: sortUp });
-  };
+  }, [sortParam, sortUp, setSort]);
 
   return (
     <table className={styles.table}>
@@ -60,7 +60,14 @@ const TodoList = ({ data, setSort }) => {
   );
 };
 TodoList.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    complete: PropTypes.bool,
+    type: PropTypes.string,
+    date: PropTypes.string,
+  })),
   setSort: PropTypes.func,
 };
 
