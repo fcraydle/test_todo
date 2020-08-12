@@ -36,5 +36,6 @@ app.use('/todolist', todolist);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(express.urlencoded({extended:true}))
 
 http.listen(3001, () => console.log('Server Started'));
