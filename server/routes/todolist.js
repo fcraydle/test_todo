@@ -1,11 +1,16 @@
-const {Router} = require('express');
+const { Router } = require('express');
 const router = Router();
-const Users = require('../models/users');
 const authenticate = require('../authenticate');
 const asyncHandler = require('express-async-handler');
+const Users = require('../models/users');
+
+router.get('/', asyncHandler(async (req, res) => {
+	const todo = await Users.findOne({ _id: req.user._id }, 'tasks')
+	res.status(200).send(todo || []);
+}));
 
 router.post('/delete', authenticate.verifyUser, asyncHandler(async (req, res) => {
-	await Users.updateOne({_id: req.user._id}, {$pull: {"tasks": {id: req.body.id}}},
+	await Users.updateOne({ _id: req.user._id }, { $pull: { "tasks": { id: req.body.id } } },
 		(err, result) => {
 			if (err)
 				res.status(500).send('Error');
@@ -15,15 +20,9 @@ router.post('/delete', authenticate.verifyUser, asyncHandler(async (req, res) =>
 	res.status(200).send('success');
 }));
 
-router.get('/', authenticate.verifyUser, asyncHandler(async (req, res) => {
-	const todo = await Users.findOne({_id: req.user._id}, 'tasks')
-	res.status(200).send(todo || []);
-}));
-
-
 router.put('/create', authenticate.verifyUser, asyncHandler(async (req, res) => {
-	await Users.updateOne({_id: req.user._id},
-		{$addToSet: {tasks: {...req.body, completed: false}}},
+	await Users.updateOne({ _id: req.user._id },
+		{ $addToSet: { tasks: { ...req.body, completed: false } } },
 		(err, result) => {
 			if (err)
 				res.status(500).send('Error');
@@ -34,11 +33,11 @@ router.put('/create', authenticate.verifyUser, asyncHandler(async (req, res) => 
 }));
 
 router.post('/complete', authenticate.verifyUser, asyncHandler(async (req, res) => {
-	let task = await Users.findOne({_id: req.user._id}, {'tasks': {$elemMatch: {'id': req.body.id}}});
+	let task = await Users.findOne({ _id: req.user._id }, { 'tasks': { $elemMatch: { 'id': req.body.id } } });
 	if (!task)
 		res.status(400);
 	let status = task.tasks[0].completed;
-	await Users.updateOne({_id: req.user._id, "tasks.id": req.body.id}, {$set: {"tasks.$.completed": !status}}),
+	await Users.updateOne({ _id: req.user._id, "tasks.id": req.body.id }, { $set: { "tasks.$.completed": !status } }),
 		(err, result) => {
 			if (err)
 				res.status(500).send('Error');
@@ -48,9 +47,8 @@ router.post('/complete', authenticate.verifyUser, asyncHandler(async (req, res) 
 	res.status(200).send('success');
 }));
 
-
 router.post('/change', authenticate.verifyUser, asyncHandler(async (req, res) => {
-	await Users.updateOne({_id: req.user._id, "tasks.id": req.body.id}, {
+	await Users.updateOne({ _id: req.user._id, "tasks.id": req.body.id }, {
 		$set: {
 			"tasks.$.title": req.body.title,
 			"tasks.$.description": req.body.description,
